@@ -18,6 +18,17 @@
         "phantomjs": "0.2.6",
         "es5-shim": ""
     },
+    "testling": {
+        "browsers": [
+            "ie6", "ie7", "ie8", "ie9",
+            "firefox/15", "chrome/22", "opera/12", "safari/5.1"
+        ],
+        "harness" : "mocha-tdd",
+        "scripts": [
+            "dist/rye.js"
+        ],
+        "files": "./test/spec.js"
+    },
     "scripts": {
         "test": "cake -b PhantomJS test"
     },
