@@ -20,7 +20,7 @@
     "testling": {
         "browsers": {
             "ie": [8, 9, 10],
-            "ff": [6, 9, 15],
+            "ff": [6, 15],
             "chrome": [22],
             "safari": [5.1]
         },
