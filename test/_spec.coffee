@@ -1,6 +1,9 @@
 exports = {}
 
-exports.assert = (chai or require('chai')).assert
+# testling require
+chai = chai ? require('chai')
+
+exports.assert = chai.assert
 
 exports.$ = Rye
 
