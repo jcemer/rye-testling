@@ -1,9 +1,10 @@
 exports = {}
 
-# testling require
-chai = chai ? require('chai')
-
-exports.assert = chai.assert
+if typeof chai is 'undefined'
+    assert = require('chai').assert
+else
+    assert = chai.assert
+exports.assert = assert
 
 exports.$ = Rye
 
