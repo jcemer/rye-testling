@@ -4,7 +4,7 @@
 
   exports = {};
 
-  exports.assert = require('chai').assert;
+  exports.assert = chai.assert;
 
   exports.$ = Rye;
 
