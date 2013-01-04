@@ -24,7 +24,7 @@
             "chrome": [ 22 ],
             "safari": [ 5.1 ]
         },
-        "harness" : "mocha-tdd",
+        "harness" : "mocha-tdd --grep (slow)",
         "scripts": [
             "dist/rye.js"
         ],
