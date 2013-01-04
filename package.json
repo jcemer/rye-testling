@@ -19,13 +19,13 @@
     },
     "testling": {
         "browsers": {
-            "ie": [ 8, 9, 10 ],
-            "ff": [ 15 ],
-            "chrome": [ 22 ],
-            "safari": [ 5.1 ]
+            "ie": [8, 9, 10],
+            "ff": [15],
+            "chrome": [22],
+            "safari": [5.1]
         },
-        "server" : "cake test:server",
-        "harness" : "mocha-tdd",
+        "server": "cake test:server",
+        "harness": "mocha-tdd",
         "scripts": [
             "dist/rye.js"
         ],
