@@ -24,7 +24,6 @@
             "chrome": [22],
             "safari": [5.1]
         },
-        "server": "node server.js",
         "harness": "mocha-tdd",
         "scripts": [
             "dist/rye.js"
