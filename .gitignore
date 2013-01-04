@@ -19,10 +19,4 @@ thumbs.db
 
 *.sublime-workspace
 
-dist
-
-test/spec*.js
-test/deps.js
-test/test.css
-
 .coverage
