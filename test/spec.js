@@ -4,7 +4,7 @@
 
   exports = {};
 
-  exports.assert = chai.assert;
+  exports.assert = (chai || require('chai')).assert;
 
   exports.$ = Rye;
 
@@ -112,6 +112,19 @@
     return fire('end', element);
   };
 
+<<<<<<< HEAD
+=======
+  (function() {
+    var test;
+    test = document.createElement('section');
+    test.id = 'test';
+    document.body.appendChild(test);
+    return setup(function() {
+      return test.innerHTML = "<header>\n    <h2>This is the test area</h2>\n</header>\n<div class=\"content\">\n    <p id=\"hello\">Hello</p>\n    <ul class=\"list\">\n        <li class=\"a\">One</li>\n        <li class=\"b\">Two</li>\n        <li class=\"c\">Three</li>\n    </ul>\n</div>";
+    });
+  })();
+
+>>>>>>> master
   exports.util = Rye.require('Util');
 
   exports.data = Rye.require('Data');
