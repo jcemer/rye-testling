@@ -1,12 +1,16 @@
 (function() {
-  var chai, exports,
+  var assert, exports,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   exports = {};
 
-  chai = chai != null ? chai : require('chai');
+  if (typeof chai === 'undefined') {
+    assert = require('chai').assert;
+  } else {
+    assert = chai.assert;
+  }
 
-  exports.assert = chai.assert;
+  exports.assert = assert;
 
   exports.$ = Rye;
 
