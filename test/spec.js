@@ -4,7 +4,12 @@
 
   exports = {};
 
-  exports.assert = (chai || require('chai')).assert;
+  if (typeof chai === 'undefined') {
+    var chai = require('chai');
+  }
+  exports.assert = chai.assert;
+
+
 
   exports.$ = Rye;
 
