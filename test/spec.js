@@ -112,8 +112,6 @@
     return fire('end', element);
   };
 
-<<<<<<< HEAD
-=======
   (function() {
     var test;
     test = document.createElement('section');
@@ -124,7 +122,6 @@
     });
   })();
 
->>>>>>> master
   exports.util = Rye.require('Util');
 
   exports.data = Rye.require('Data');
