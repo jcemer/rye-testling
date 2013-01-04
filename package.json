@@ -24,7 +24,6 @@
             "chrome": [22],
             "safari": [5.1]
         },
-        "server": "cake test:server",
         "harness": "mocha-tdd",
         "scripts": [
             "dist/rye.js"
