@@ -24,7 +24,8 @@
             "chrome": [ 22 ],
             "safari": [ 5.1 ]
         },
-        "harness" : "mocha-tdd --grep (slow)",
+        "server" : "cake test:server",
+        "harness" : "mocha-tdd",
         "scripts": [
             "dist/rye.js"
         ],
