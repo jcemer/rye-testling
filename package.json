@@ -27,7 +27,8 @@
         "harness": "mocha-tdd",
         "scripts": [
             "dist/rye.js",
-            "testling.js"
+            "testling.js",
+            "node_modules/es5-shim/es5-shim.js"
         ],
         "files": [
             "test/spec.js"
