@@ -25,6 +25,7 @@
             "safari": [5.1]
         },
         "harness": "mocha-tdd",
+        "server": "node server.js 8642",
         "scripts": [
             "dist/rye.js",
             "testling.js",
