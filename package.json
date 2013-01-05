@@ -26,9 +26,12 @@
         },
         "harness": "mocha-tdd",
         "scripts": [
-            "dist/rye.js"
+            "dist/rye.js",
+            "testling.js"
         ],
-        "files": "test/spec.js"
+        "files": [
+            "test/spec.js"
+        ]
     },
     "scripts": {
         "test": "cake -b PhantomJS test"
