@@ -1,4 +1,4 @@
 var coffee = require('coffee-script')
   , server = require('./test/assets/server.coffee')
 
-server.listen(8642)
+server.listen(process.argv[2] || 8642)
