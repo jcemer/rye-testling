@@ -1152,7 +1152,7 @@
 }).call(this);
 
 (function() {
-
+  return;
   suite('Request (slow)', function() {
     test('get request', function(done) {
       var countdown, obj, query;
