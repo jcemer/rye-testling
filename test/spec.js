@@ -10,6 +10,10 @@
     assert = chai.assert;
   }
 
+  for(i in window) {
+    console.log(i, window[i]);
+  }
+
   exports.assert = assert;
 
   exports.$ = Rye;
