@@ -1463,12 +1463,11 @@
   suite('Style', function() {
     var getClass;
     test('getCSS', function() {
-      var div, test;
+      var div;
       div = document.createElement('div');
       div.style.marginLeft = '2px';
       assert.equal(style.getCSS(div, 'margin-left'), '2px');
-      test = document.getElementById('test');
-      return assert.equal(style.getCSS(test, 'position'), 'absolute');
+      return assert.equal(style.getCSS(document.body, 'display'), 'block');
     });
     test('setCSS', function() {
       var div;
