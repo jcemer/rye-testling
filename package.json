@@ -26,9 +26,7 @@
             "dist/rye.js",
             "test/libs/chai.js",
             "test/libs/es5-shim.js",
-            "testling-script.js"
-        ],
-        "files": [
+            "testling-script.js",
             "test/spec.js"
         ]
     },
