@@ -56,11 +56,13 @@ Rye.define('Util', function(){
         }
 
     function each (obj, fn) {
-        if (!obj) return
+        if (!obj) {
+            return
+        }
         var keys = Object.keys(obj)
           , ln = keys.length
           , i, key
-        for (var i = 0; i < ln; i++) {
+        for (i = 0; i < ln; i++) {
             key = keys[i]
             fn.call(obj, obj[key], key)
         }
@@ -134,7 +136,9 @@ Rye.define('Util', function(){
     }
 
     function applier (direction, fn, context, args, cutoff) {
-        cutoff || (cutoff = Infinity) // this must be a first
+        if (!cutoff) {
+            cutoff = Infinity // this must be a first
+        }
         return function () {
             if (context === 'this'){
                 context = this
@@ -335,7 +339,7 @@ Rye.define('Query', function(){
         if (typeof selector === 'function') {
             var fn = selector
             return _create(this.elements.filter(function(element, index){
-                return fn.call(element, element, index) == !inverse
+                return fn.call(element, element, index) != (inverse || false)
             }))
         }
         if (selector && selector[0] === '!') {
@@ -343,7 +347,7 @@ Rye.define('Query', function(){
             inverse = true
         }
         return _create(this.elements.filter(function(element){
-            return matches(element, selector) == !inverse
+            return matches(element, selector) != (inverse || false)
         }))
     }
 
@@ -423,14 +427,15 @@ Rye.define('Query', function(){
     this.parents = function (selector) {
         var ancestors = []
           , elements = this.elements
-
-        while (elements.length > 0 && elements[0] !== undefined) {
-            elements = elements.map(function(element){
+          , fn = function (element) {
                 if ((element = element.parentNode) && element !== document && ancestors.indexOf(element) < 0) {
                     ancestors.push(element)
                     return element
                 }
-            })
+            }
+
+        while (elements.length > 0 && elements[0] !== undefined) {
+            elements = elements.map(fn)
         }
         return _create(ancestors, selector)
     }
@@ -903,7 +908,7 @@ Rye.define('Events', function(){
         }
     }
 
-    ;['addListener', 'once', 'removeListener'].forEach(acceptMultipleEvents)
+    ['addListener', 'once', 'removeListener'].forEach(acceptMultipleEvents)
 
     DOMEventEmitter.prototype.destroy = function () {
         return this.removeListener('*')
@@ -927,7 +932,7 @@ Rye.define('Events', function(){
         getEmitter(element)[method](event, handler)
     }
 
-    ;['addListener', 'removeListener', 'once', 'trigger'].forEach(function(method){
+    ['addListener', 'removeListener', 'once', 'trigger'].forEach(function(method){
         // Create a function proxy for the method
         var fn = util.curry(emitterProxy, method)
         // Exports module and rye methods
@@ -994,7 +999,9 @@ Rye.define('TouchEvents', function(){
         this.trigger()
     }
     Gesture.prototype.cancel = function () {
-        this.timeout && clearTimeout(this.timeout)
+        if (this.timeout) {
+            clearTimeout(this.timeout)
+        }
         this.timeout = null
     }
 
@@ -1069,7 +1076,7 @@ Rye.define('TouchEvents', function(){
             touch.y2 = event.touches[0].pageY
         })
 
-        events.addListener(document.body, 'touchend', function (event) {
+        events.addListener(document.body, 'touchend', function () {
             longTap.cancel()
 
             // swipe
@@ -1199,7 +1206,9 @@ Rye.define('Request', function(){
         // sets request's accept and content type 
         if (mime) {
             headers['Accept'] = mime
-            xhr.overrideMimeType && xhr.overrideMimeType(mime.split(',')[0])
+            if (xhr.overrideMimeType) {
+                xhr.overrideMimeType(mime.split(',')[0])
+            }
         }
         if (settings.contentType || ['POST', 'PUT'].indexOf(settings.method) >= 0) {
             headers['Content-Type'] =  settings.contentType || 'application/x-www-form-urlencoded'
@@ -1278,8 +1287,9 @@ Rye.define('Request', function(){
     var hideTypes = 'fieldset submit reset button image radio checkbox'.split(' ')
 
     this.query = function () {
-        var fields = {}
-        $(this.get(0).elements).filter(function(field){
+        var form = this.get(0)
+          , fields = {}
+        new Rye(form && form.elements).forEach(function(field){
             if (!field.disabled && (
                     field.checked
                  || (field.type && hideTypes.indexOf(field.type) < 0)

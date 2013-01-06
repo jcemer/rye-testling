@@ -119,6 +119,12 @@
   };
 
   (function() {
+    var query;
+    query = Mocha.utils.parseQuery(window.location.search || '');
+    return exports.server = window.server || query.server || '';
+  })();
+
+  (function() {
     var test;
     test = document.createElement('section');
     test.id = 'test';
@@ -1162,13 +1168,13 @@
         bar: 2
       };
       query = request.query(obj);
-      request('/echo', function(err, data) {
+      request("" + server + "/echo", function(err, data) {
         assert.equal(this.method, 'GET');
         assert.equal(data, 'get no data');
         return countdown.fire();
       });
       request({
-        url: '/echo',
+        url: "" + server + "/echo",
         method: 'get',
         data: obj,
         callback: function(err, data) {
@@ -1178,7 +1184,7 @@
         }
       });
       request({
-        url: '/echo',
+        url: "" + server + "/echo",
         method: 'get',
         data: query,
         callback: function(err, data) {
@@ -1188,7 +1194,7 @@
         }
       });
       return request.get({
-        url: '/echo',
+        url: "" + server + "/echo",
         data: obj,
         callback: function(err, data) {
           assert.equal(data, 'get 2');
@@ -1205,7 +1211,7 @@
       };
       query = request.query(obj);
       request({
-        url: '/echo',
+        url: "" + server + "/echo",
         method: 'post'
       }, function(err, data) {
         assert.equal(this.method, 'POST');
@@ -1213,7 +1219,7 @@
         return countdown.fire();
       });
       request({
-        url: '/echo',
+        url: "" + server + "/echo",
         method: 'post',
         data: obj
       }, function(err, data) {
@@ -1222,7 +1228,7 @@
         return countdown.fire();
       });
       return request.post({
-        url: '/echo',
+        url: "" + server + "/echo",
         data: obj
       }, function(err, data) {
         assert.equal(data, 'post 2');
@@ -1232,12 +1238,12 @@
     test('async', function(done) {
       var countdown;
       countdown = new Number.Countdown(2, done);
-      request.get('/echo', function(err, data) {
+      request.get("" + server + "/echo", function(err, data) {
         assert.isTrue(this.async);
         return countdown.fire();
       });
       return request.get({
-        url: '/echo',
+        url: "" + server + "/echo",
         async: false
       }, function(err, data) {
         assert.isFalse(this.async);
@@ -1246,7 +1252,7 @@
     });
     test('accept json', function(done) {
       return request({
-        url: '/accept?json',
+        url: "" + server + "/accept?json",
         responseType: 'json'
       }, function(err, data) {
         assert.equal(this.type, 'json');
@@ -1258,7 +1264,7 @@
     });
     test('accept xml', function(done) {
       return request({
-        url: '/accept?xml',
+        url: "" + server + "/accept?xml",
         responseType: 'xml'
       }, function(err, data) {
         assert.equal(this.type, 'xml');
@@ -1268,7 +1274,7 @@
     });
     test('accept html', function(done) {
       return request({
-        url: '/accept?html',
+        url: "" + server + "/accept?html",
         responseType: 'html'
       }, function(err, data) {
         assert.equal(this.type, 'html');
@@ -1278,7 +1284,7 @@
     });
     test('accept text', function(done) {
       return request({
-        url: '/accept?text',
+        url: "" + server + "/accept?text",
         responseType: 'text'
       }, function(err, data) {
         assert.equal(this.type, 'text');
@@ -1288,7 +1294,7 @@
     });
     test('timeout', function(done) {
       return request({
-        url: '/sleep?' + Date.now(),
+        url: "" + server + "/sleep?" + (Date.now()),
         timeout: '1'
       }, function(err, data) {
         assert.instanceOf(err, Error);
@@ -1297,7 +1303,7 @@
     });
     test('parse error', function(done) {
       return request({
-        url: '/echo',
+        url: "" + server + "/echo",
         responseType: 'json'
       }, function(err, data) {
         assert.instanceOf(err, Error);
@@ -1308,14 +1314,14 @@
       var countdown;
       countdown = new Number.Countdown(2, done);
       request({
-        url: '/content',
+        url: "" + server + "/content",
         method: 'post'
       }, function(err, data) {
         assert.equal(data, 'content type application/x-www-form-urlencoded');
         return countdown.fire();
       });
       return request({
-        url: '/content'
+        url: "" + server + "/content"
       }, function(err, data) {
         assert.equal(data, 'content type undefined');
         return countdown.fire();
@@ -1325,27 +1331,27 @@
       var countdown;
       countdown = new Number.Countdown(2, done);
       request({
-        url: '/status?status=200'
+        url: "" + server + "/status?status=200"
       }, function(err, data, xhr) {
         assert.equal(xhr.status, 200);
         return countdown.fire();
       });
       request({
-        url: '/status?status=500'
+        url: "" + server + "/status?status=500"
       }, function(err, data, xhr) {
         assert.equal(xhr.status, 500);
         assert.equal(err.message, 'Request failed');
         return countdown.fire();
       });
       request({
-        url: '/status?status=400'
+        url: "" + server + "/status?status=400"
       }, function(err, data, xhr) {
         assert.equal(xhr.status, 400);
         assert.equal(err.message, 'Request failed');
         return countdown.fire();
       });
       return request({
-        url: '/status?status=304'
+        url: "" + server + "/status?status=304"
       }, function(err, data, xhr) {
         assert.equal(xhr.status, 304);
         return countdown.fire();
@@ -1378,22 +1384,27 @@
       form = makeElement('form', "<input name=\"email\" value=\"koss@nocorp.me\">\n<input name=\"password\" value=\"123456\">\n<input name=\"ops\" value=\"123456\" disabled>\n<input name=\"unchecked_hasValue\" value=\"myValue\" type=\"checkbox\">\n<input name=\"unchecked_noValue\" type=\"checkbox\">\n<input name=\"checked_hasValue\" checked value=\"myValue\" type=\"checkbox\">\n<input name=\"checked_disabled\" checked value=\"ImDisabled\" type=\"checkbox\" disabled>\n<input name=\"checked_noValue\" checked type=\"checkbox\">\n\n<fieldset>\n  <input type=\"radio\" name=\"radio1\" value=\"r1\">\n  <input type=\"radio\" name=\"radio1\" checked value=\"r2\">\n  <input type=\"radio\" name=\"radio1\" value=\"r3\">\n</fieldset>\n\n<textarea name=\"textarea\">text</textarea>\n\n<select name=\"selectbox\">\n    <option value=\"selectopt1\">select1</option>\n    <option value=\"selectopt2\">select2</option>\n    <option value=\"selectopt3\">select3</option>\n</select>\n\n<select name=\"selectbox-multiple\" multiple>\n    <option value=\"selectopt1\" selected>select1</option>\n    <option value=\"selectopt2\">select2</option>\n    <option value=\"selectopt3\" selected>select3</option>\n</select>\n\n<div class=\"actions\">\n  <input type=\"submit\" name=\"submit\" value=\"Save\">\n  <input type=\"button\" name=\"preview\" value=\"Preview\">\n  <input type=\"reset\" name=\"clear\" value=\"Clear form\">\n  <button name=\"button\">I'm a button</button>\n</div>");
       query = $(form).query();
       query = query.split('&').sort().join('&');
-      return assert.equal(query, 'checked_hasValue=myValue&checked_noValue=on&email=koss%40nocorp.me&password=123456&radio1=r2&selectbox-multiple%5B%5D=selectopt1&selectbox-multiple%5B%5D=selectopt3&selectbox=selectopt1&textarea=text');
+      assert.equal(query, 'checked_hasValue=myValue&checked_noValue=on&email=koss%40nocorp.me&password=123456&radio1=r2&selectbox-multiple%5B%5D=selectopt1&selectbox-multiple%5B%5D=selectopt3&selectbox=selectopt1&textarea=text');
+      form = makeElement('form');
+      query = $(form).query();
+      assert.equal(query, '');
+      query = $([]).query();
+      return assert.equal(query, '');
     });
     return test('Rye', function(done) {
       var countdown;
       countdown = new Number.Countdown(3, done);
-      $.request('/echo', function(err, data) {
+      $.request("" + server + "/echo", function(err, data) {
         assert.equal(this.method, 'GET');
         assert.equal(data, 'get no data');
         return countdown.fire();
       });
-      $.get('/echo', function(err, data) {
+      $.get("" + server + "/echo", function(err, data) {
         assert.equal(this.method, 'GET');
         assert.equal(data, 'get no data');
         return countdown.fire();
       });
-      return $.post('/echo', function(err, data) {
+      return $.post("" + server + "/echo", function(err, data) {
         assert.equal(this.method, 'POST');
         assert.equal(data, 'post no data');
         return countdown.fire();
