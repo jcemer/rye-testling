@@ -8,14 +8,9 @@
     "devDependencies": {
         "rimraf": "",
         "flour": "",
-        "mocha": "",
-        "chai": "",
         "uglify-js": "2.2.0",
         "jshint": "",
-        "coffee-script": "1.4.0",
-        
-        "mocha-phantomjs": "",
-        "es5-shim": ""
+        "coffee-script": "1.4.0"
     },
     "testling": {
         "browsers": {
@@ -36,7 +31,7 @@
         ]
     },
     "scripts": {
-        "test": "cake -b PhantomJS test"
+        "test": "cake -b PhantomJS test lint"
     },
     "repository": {
         "type": "git",

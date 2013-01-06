@@ -66,24 +66,32 @@ task 'lint', ->
     flour.linters.js.options =
         forin    : true
         immed    : true
+        # indent   : true
         latedef  : true
         newcap   : true
+        noarg    : true
+        noempty  : true
         nonew    : true
+        quotmark : 'single'
         undef    : true
-        #unused   : true
+        unused   : true
         asi      : true
         boss     : true
         curly    : true
         eqnull   : true
         laxbreak : true
         laxcomma : true
-        browser  : true
+        sub      : true
         supernew : true
+        browser  : true
 
     flour.linters.js.globals =
         Rye      : true
 
-    lint 'lib/*.js'
+    lint 'lib/*.js', (files) ->
+        # for file, res of files
+        #     process.exit(1) if res.output
+
 
 # Testing
 # ==============
@@ -92,24 +100,6 @@ option '-b', '--browser [BROWSER]', 'Browser for test tasks'
 option '-q', '--quick', 'Skip slow tests'
 option '-p', '--port', 'Server port'
 option '-g', '--grep [STRING]', 'Grep test'
-
-test =
-    assets: "/test/assets/"
-    require: (module) ->
-        require ".#{this.assets}#{module}"
-    url: (options) ->
-        if options.quick
-            url = "file:///#{process.cwd()}#{this.assets}index.html?grep=(slow)&invert=true"
-        else
-            url = "http://localhost:#{this.port(options)}#{this.assets}"
-            url += "?grep=#{options.grep}" if options.grep
-        url
-    port: (options) ->
-        options.port || 3000
-
-task 'test:server', (options) ->
-    server = test.require('server')
-    server.listen test.port(options)
 
 ###
     Examples:
@@ -121,27 +111,37 @@ task 'test:server', (options) ->
 task 'test', (options) ->
     invoke 'build:dev'
     invoke 'build:test'
-    invoke 'test:server' unless options.quick
+
+    assets = "/test/assets/"
+    port = options.port || 3000
+    if options.quick
+        url = "file:///#{process.cwd()}#{assets}index.html?grep=(slow)&invert=true"
+    else
+        url = "http://localhost:#{port}#{assets}"
+        url += "?grep=#{options.grep}" if options.grep
+
+    # server
+    unless options.quick
+        server = require ".#{assets}server"
+        server.listen port
     
-    url = test.url(options)
+    # browser
     browser = options.browser or 'Google Chrome'
 
     if browser is 'PhantomJS'
-        mocha = cp.spawn './node_modules/.bin/mocha-phantomjs', [url]
-        mocha.stdout.pipe process.stdout
-        mocha.on 'exit', (code) ->
+        phantomjs = cp.spawn 'phantomjs', [".#{assets}phantomjs.coffee", url]
+        phantomjs.stdout.pipe process.stdout
+        phantomjs.on 'exit', (code) ->
             process.exit(code)
 
     else
-        if not options.browser and not options.quick
-            cp.exec """open '#{url}'"""
-        else if process.platform is 'darwin'
-            browsers = test.require('browsers')
-            osa = cp.spawn 'osascript', []
+        if process.platform is 'darwin'
+            browsers = require ".#{assets}browsers-osx"
+            osa = cp.spawn 'osascript'
             osa.stdin.write browsers browser, url
             osa.stdin.end()
         else
-            cp.exec """open -a "#{browser}" '#{url}'"""
+            cp.exec "open -a '#{browser}' '#{url}'"
 
 # Coverage
 # ==============
