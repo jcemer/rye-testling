@@ -4,7 +4,7 @@
 
   exports = {};
 
-  exports.assert = chai.assert;
+  exports.assert = window.chai.assert;
 
   exports.$ = Rye;
 
