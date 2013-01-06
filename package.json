@@ -22,9 +22,10 @@
         "harness": "mocha-tdd",
         "server": "node server.js 8642",
         "scripts": [
-            "testling-script.js",
             "dist/rye.js",
-            "test/libs/es5-shim.js"
+            "test/libs/chai.js",
+            "test/libs/es5-shim.js",
+            "testling-script.js"
         ],
         "files": [
             "test/spec.js"
